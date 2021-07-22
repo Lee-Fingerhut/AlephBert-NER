@@ -1,0 +1,38 @@
+name: ner
+channels:
+  - pytorch
+  - defaults
+  - conda-forge
+dependencies:
+  - black
+  - cffi
+  - cmake
+  - cudatoolkit
+  - cython
+  - ipython
+  - jupyter
+  - jupyterlab
+  - loguru
+  - matplotlib
+  - mkl
+  - nb_conda
+  - networkx
+  - nltk  # for torchtext SST dataset
+  - numpy
+  - numba
+  - pandas=1.1.5
+  - python=3.8.0
+  - python-libsbml
+  - pytorch
+  - keras
+  - scikit-learn
+  - scipy
+  - seaborn
+  - seqeval
+  - spacy
+  - stanza
+  - textblob
+  - transformers
+  - torchtext
+  - tqdm
+  - pip

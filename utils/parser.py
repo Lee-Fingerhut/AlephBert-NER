@@ -51,3 +51,15 @@ class Parser(object):
         opts.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         return opts
+
+    @staticmethod
+    def predict() -> argparse.Namespace:
+        parser = argparse.ArgumentParser()
+
+        parser.add_argument("--checkpoint", type=Path, required=True, help="checkpoint directory")
+        parser.add_argument("--sentence", type=str, default=None, help="sentence to apply NER")
+
+        opts = parser.parse_args()
+        opts.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+        return opts

@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import seaborn as sns
 import torch
@@ -127,27 +126,3 @@ if __name__ == "__main__":
     plt.ylabel("Loss")
     plt.legend()
     plt.savefig(checkpoints.joinpath("training_statistics.pdf"), tight_layout=True)
-
-
-# test_sentence = """
-# כאשר נטשה וילנה היו קטנות, הן גודלו על ידי אלכסיי ומלינה, שגידלו אותן בשביל ליצור מסווה לאחת המשימות שהוטלו עליהם – על אף שהם לא היו ההורים האמיתיים שלהן ונטשה וילנה לא אחיות. לאחר שהמשימה הסתיימה, נטשה וילנה נחטפו על ידי דרייקוב וגודלו בחדר האדום, שם הכשירו אותן להיות מתנקשות, ביחד עם הרבה נערות אחרות. בשלב מסוים נטשה הצליחה לברוח, אם כי ילנה נותרה מאחור. לאחר שנטשה ברחה, דרייקוב הגביר את האבטחה, אך לבסוף
-# """
-#
-# tokenized_sentence = tokenizer.encode(test_sentence)
-# input_ids = torch.tensor([tokenized_sentence]).cuda()
-#
-# with torch.no_grad():
-#     output = model(input_ids)
-# label_indices = np.argmax(output[0].to("cpu").numpy(), axis=2)
-#
-# tokens = tokenizer.convert_ids_to_tokens(input_ids.to("cpu").numpy()[0])
-# new_tokens, new_labels = [], []
-# for token, label_idx in zip(tokens, label_indices[0]):
-#     if token.startswith("##"):
-#         new_tokens[-1] = new_tokens[-1] + token[2:]
-#     else:
-#         new_labels.append(tag_values[label_idx])
-#         new_tokens.append(token)
-#
-# for token, label in zip(new_tokens, new_labels):
-#     print("{}\t{}".format(label, token))

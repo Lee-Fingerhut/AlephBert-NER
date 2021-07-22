@@ -73,3 +73,9 @@ Example:
 ```buildoutcfg
 python ner_training --train-file dataset/cvs_data/spmrl/gold/morph_gold_train.csv --finetune --name sprml-finetune
 ```
+
+## Predicting
+Predicting NER for a test sentence: 
+```buildoutcfg
+python ner_predict --checkpoint checkpoint/<checkpoint dir> --sentence "הרלין הכלב הלך לטייל בחוף הים."
+```

@@ -73,7 +73,16 @@ python ner_training --train-file dataset/cvs_data/spmrl/gold/morph_gold_train.cs
 ```
 
 ## Predicting
+```buildoutcfg
+usage: ner_predict.py [-h] --checkpoint CHECKPOINT [--sentence SENTENCE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --checkpoint CHECKPOINT
+                        checkpoint directory
+  --sentence SENTENCE   sentence to apply NER
+```
 Predicting NER for a test sentence: 
 ```buildoutcfg
-python ner_predict --checkpoint checkpoint/<checkpoint dir> --sentence "הרלין הכלב הלך לטייל בחוף הים."
+python ner_predict --checkpoint checkpoints/<checkpoint dir> --sentence "הרלין הכלב הלך לטייל בחוף הים."
 ```

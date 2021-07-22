@@ -5,7 +5,7 @@ import torch.optim as optim
 import torch.nn as nn
 import torch.utils.data as tud
 
-from seqeval.metrics import accuracy_score, f1_score
+from seqeval.metrics import accuracy_score
 from tqdm import trange
 
 
@@ -105,6 +105,5 @@ def train_model(
         ]
         valid_tags = [tag_values[l_i] for l in true_labels for l_i in l if tag_values[l_i] != "PAD"]
         print("Validation Accuracy: {}".format(accuracy_score(pred_tags, valid_tags)))
-        print("Validation F1-Score: {}".format(f1_score(pred_tags, valid_tags)))
 
     return model, tag_values, loss_values, validation_loss_values

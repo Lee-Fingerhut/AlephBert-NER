@@ -12,7 +12,7 @@ DATASETS_PATHS = (
 
 
 def bmes_to_cvs(source: Path, target: Path):
-    with open(source, 'r') as in_file:
+    with open(source, "r") as in_file:
         file = in_file.read()
         sentences = file.split("\n\n")
         sentences = [s.split("\n") for s in sentences]
@@ -24,9 +24,9 @@ def bmes_to_cvs(source: Path, target: Path):
             sentences[i] = z
 
     flat_list = [item for sublist in sentences for item in sublist]
-    with open(target, 'w') as out_file:
+    with open(target, "w") as out_file:
         writer = csv.writer(out_file)
-        writer.writerow(('Sentence #', 'Word', 'POS', 'Tag'))
+        writer.writerow(("Sentence #", "Word", "POS", "Tag"))
         writer.writerows(flat_list)
 
 

@@ -120,15 +120,15 @@ if __name__ == "__main__":
 
     axs[0].plot(statistics_dict["train loss"], "b-o", label="training loss")
     axs[0].plot(statistics_dict["validation loss"], "r-o", label="validation loss")
-    axs[0].title("Learning curve")
-    axs[0].xlabel("Epoch")
-    axs[0].ylabel("Loss")
+    axs[0].set_title("Learning curve")
+    axs[0].set_xlabel("Epoch")
+    axs[0].set_ylabel("Loss")
     axs[0].legend()
 
     axs[1].plot(statistics_dict["validation accuracy"], "r-o", label="validation accuracy")
-    axs[1].title("Accuracy")
-    axs[1].xlabel("Epoch")
-    axs[1].ylabel("Accuracy[%]")
-    axs[1].legend()
+    axs[1].set_title("Accuracy")
+    axs[1].set_xlabel("Epoch")
+    axs[1].set_ylabel("Accuracy[%]")
 
+    plt.subplots_adjust(wspace=0.25)
     plt.savefig(checkpoints.joinpath("training_statistics.pdf"), tight_layout=True)

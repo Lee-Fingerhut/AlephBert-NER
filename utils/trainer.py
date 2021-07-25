@@ -107,7 +107,7 @@ def train_model(
             if tag_values[l_i] != "PAD"
         ]
         valid_tags = [tag_values[l_i] for l in true_labels for l_i in l if tag_values[l_i] != "PAD"]
-        epoch_accuracy = accuracy_score(pred_tags, valid_tags)
+        epoch_accuracy = 100. * accuracy_score(pred_tags, valid_tags)
         validation_accuracy.append(epoch_accuracy)
         print("Validation Accuracy: {:.3f}".format(epoch_accuracy))
         if validation_max_accuracy < epoch_accuracy:

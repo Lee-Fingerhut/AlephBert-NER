@@ -11,7 +11,7 @@ DATASETS_PATHS = (
 )
 
 
-def bmes_to_cvs(source: Path, target: Path):
+def bmes_to_cvs(source: Path):
     with open(source, "r") as in_file:
         file = in_file.read()
         sentences = file.split("\n\n")
@@ -24,26 +24,21 @@ def bmes_to_cvs(source: Path, target: Path):
             sentences[i] = z
 
     flat_list = [item for sublist in sentences for item in sublist]
-    with open(target, "w") as out_file:
-        writer = csv.writer(out_file)
-        writer.writerow(("Sentence #", "Word", "POS", "Tag"))
-        writer.writerows(flat_list)
+    return flat_list
 
 
 if __name__ == "__main__":
-
-    output_dir = Path("cvs_data").expanduser()
-    output_dir.mkdir(parents=True, exist_ok=True)
-
+    all_files_dataset = []
     for dataset in DATASETS_PATHS:
         source_dataset = dataset.expanduser()
-
-        output_dataset = output_dir.joinpath("/".join(dataset.parts[1:]))
-        output_dataset.mkdir(parents=True, exist_ok=True)
 
         for file in dataset.iterdir():
             if file.is_dir():
                 continue
 
-            output_file = output_dataset.joinpath(file.stem).with_suffix(".csv")
-            bmes_to_cvs(file, output_file)
+            all_files_dataset.extend(bmes_to_cvs(file))
+
+    with open("dataset.csv", "w") as out_file:
+        writer = csv.writer(out_file)
+        writer.writerow(("Sentence #", "Word", "POS", "Tag"))
+        writer.writerows(all_files_dataset)

@@ -106,24 +106,29 @@ if __name__ == "__main__":
         optimizer, num_warmup_steps=opts.num_warmup_steps, num_training_steps=total_steps
     )
 
-    model, tag_values, loss_values, validation_loss_values = train_model(
-        model, optimizer, scheduler, train_dataloader, valid_dataloader, tag_values, opts
-    )
-
     checkpoints = Path("checkpoints").joinpath(opts.name)
     checkpoints.mkdir(parents=True, exist_ok=True)
 
     pd.to_pickle([tokenizer, tag_values], checkpoints.joinpath("tokenizer_0_tags_1.pkl"))
-    torch.save(model, checkpoints.joinpath("model.pth"))
+
+    statistics_dict = train_model(
+        model, optimizer, scheduler, train_dataloader, valid_dataloader, tag_values, opts, checkpoints
+    )
 
     # Plot the learning curve.
-    plt.plot(loss_values, "b-o", label="training loss")
-    plt.plot(validation_loss_values, "r-o", label="validation loss")
+    _, axs = plt.subplots(1, 2, figsize=(10, 5))
 
-    # Label the plot.
-    plt.title("Learning curve")
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
-    plt.legend()
+    axs[0].plot(statistics_dict["train loss"], "b-o", label="training loss")
+    axs[0].plot(statistics_dict["validation loss"], "r-o", label="validation loss")
+    axs[0].title("Learning curve")
+    axs[0].xlabel("Epoch")
+    axs[0].ylabel("Loss")
+    axs[0].legend()
+
+    axs[1].plot(statistics_dict["validation accuracy"], "r-o", label="validation accuracy")
+    axs[1].title("Accuracy")
+    axs[1].xlabel("Epoch")
+    axs[1].ylabel("Accuracy[%]")
+    axs[1].legend()
+
     plt.savefig(checkpoints.joinpath("training_statistics.pdf"), tight_layout=True)
-

@@ -5,6 +5,7 @@ import torch.optim as optim
 import torch.nn as nn
 import torch.utils.data as tud
 
+from pathlib import Path
 from seqeval.metrics import accuracy_score
 from tqdm import trange
 
@@ -17,9 +18,11 @@ def train_model(
     valid_dataloader: tud.DataLoader,
     tag_values,
     opts: argparse.Namespace,
+    checkpoints: Path
 ):
 
-    loss_values, validation_loss_values = [], []
+    train_loss, validation_loss, validation_accuracy = [], [], []
+    validation_max_accuracy = 0.0
     for _ in trange(opts.num_epochs, desc="Epoch"):
         # ========================================
         #               Training
@@ -58,10 +61,10 @@ def train_model(
 
         # Calculate the average loss over the training data.
         avg_train_loss = total_loss / len(train_dataloader)
-        print("Average train loss: {}".format(avg_train_loss))
+        print("Average train loss: {:.3f}".format(avg_train_loss))
 
         # Store the loss value for plotting the learning curve.
-        loss_values.append(avg_train_loss)
+        train_loss.append(avg_train_loss)
 
         # ========================================
         #               Validation
@@ -95,8 +98,8 @@ def train_model(
             true_labels.extend(label_ids)
 
         eval_loss = eval_loss / len(valid_dataloader)
-        validation_loss_values.append(eval_loss)
-        print("Validation loss: {}".format(eval_loss))
+        validation_loss.append(eval_loss)
+        print("Validation loss: {:.3f}".format(eval_loss))
         pred_tags = [
             tag_values[p_i]
             for p, l in zip(predictions, true_labels)
@@ -104,6 +107,15 @@ def train_model(
             if tag_values[l_i] != "PAD"
         ]
         valid_tags = [tag_values[l_i] for l in true_labels for l_i in l if tag_values[l_i] != "PAD"]
-        print("Validation Accuracy: {}".format(accuracy_score(pred_tags, valid_tags)))
+        epoch_accuracy = accuracy_score(pred_tags, valid_tags)
+        validation_accuracy.append(epoch_accuracy)
+        print("Validation Accuracy: {:.3f}".format(epoch_accuracy))
+        if validation_max_accuracy < epoch_accuracy:
+            validation_max_accuracy = epoch_accuracy
+            torch.save(model, checkpoints.joinpath("model.pth"))
 
-    return model, tag_values, loss_values, validation_loss_values
+    return {
+        "train loss": train_loss,
+        "validation loss": validation_loss,
+        "validation accuracy": validation_accuracy
+    }

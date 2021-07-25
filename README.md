@@ -61,7 +61,7 @@ BERT model is pretrained. \
 You can enable all its parameters for training. \
 Example:
 ```buildoutcfg
-python ner_training --train-file dataset/cvs_data/spmrl/gold/morph_gold_train.csv --name sprml-train
+python ner_training.py --train-file dataset/cvs_data/spmrl/gold/morph_gold_train.csv --name sprml-train
 ```
 
 ## FineTuning 
@@ -69,7 +69,7 @@ BERT model is pretrained. \
 you can freeze the encoder and finetune the classifier solely, by simply adding `--finetune` to training command. \
 Example: 
 ```buildoutcfg
-python ner_training --train-file dataset/cvs_data/spmrl/gold/morph_gold_train.csv --finetune --name sprml-finetune
+python ner_training.py --train-file dataset/cvs_data/spmrl/gold/morph_gold_train.csv --finetune --name sprml-finetune
 ```
 
 ## Predicting
@@ -84,5 +84,5 @@ optional arguments:
 ```
 Predicting NER for a test sentence: 
 ```buildoutcfg
-python ner_predict --checkpoint checkpoints/<checkpoint dir> --sentence "הרלין הכלב הלך לטייל בחוף הים."
+python ner_predict.py --checkpoint checkpoints/<checkpoint dir> --sentence "הרלין הכלב הלך לטייל בחוף הים."
 ```

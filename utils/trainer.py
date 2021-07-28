@@ -4,10 +4,23 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 import torch.utils.data as tud
-
+from sklearn.metrics import precision_recall_fscore_support
 from pathlib import Path
 from seqeval.metrics import accuracy_score
 from tqdm import trange
+import pandas as pd
+
+
+def valid_loss_decreases(valid_los_fresh=None, valid_los_old=None, valid_los_oldest=None):
+    #  if 2 epochs before the last epoch not decreasing exit sends False to make the machine exit
+    if valid_los_fresh is not None and type(valid_los_fresh) is float and valid_los_old is None and valid_los_oldest is None:
+        return True
+    elif valid_los_fresh < valid_los_old:
+        return True
+    elif valid_los_fresh < valid_los_oldest:
+        return True
+    else:
+        return False
 
 
 def train_model(
@@ -23,12 +36,16 @@ def train_model(
 
     train_loss, validation_loss, validation_accuracy = [], [], []
     validation_max_accuracy = 0.0
+    i = 0
+    validation_loss_old = None
+    validation_loss_oldest = None
+    data = pd.DataFrame(columns=['Epoch no', 'Accuracy', 'Precision', 'Recall', 'F1-Score', 'Valid Loss', 'Train Loss'])
     for _ in trange(opts.num_epochs, desc="Epoch"):
         # ========================================
         #               Training
         # ========================================
         # Perform one full pass over the training set.
-
+        i += 1
         # Put the model into training mode.
         model.train()
         # Reset the total loss for this epoch.
@@ -109,7 +126,18 @@ def train_model(
         valid_tags = [tag_values[l_i] for l in true_labels for l_i in l if tag_values[l_i] != "PAD"]
         epoch_accuracy = 100. * accuracy_score(pred_tags, valid_tags)
         validation_accuracy.append(epoch_accuracy)
+        # ========================================
+        #               Statistics
+        # ========================================
+        validation_loss_oldest = validation_loss_old
+        validation_loss_old = eval_loss
+        precision = precision_recall_fscore_support(pred_tags, valid_tags, average='weighted')
+        data.loc[i] = [i, '{:.3f}'.format(100. * accuracy_score(pred_tags, valid_tags)), '{:.3f}'.format(100. * precision[0]), '{:.3f}'.format(100. * precision[1]), '{:.3f}'.format(100. * precision[2]), '{:.3f}'.format(100. * eval_loss), '{:.3f}'.format(100. * avg_train_loss)]
+        data.to_csv('parameters.csv')
+        data.to_pickle('pickle_parameters.pkl')
         print("Validation Accuracy: {:.3f}".format(epoch_accuracy))
+        if not valid_loss_decreases(eval_loss, validation_loss_old, validation_loss_oldest):
+            exit('Valid loss increases, stopping the process')
         if validation_max_accuracy < epoch_accuracy:
             validation_max_accuracy = epoch_accuracy
             torch.save(model, checkpoints.joinpath("model.pth"))

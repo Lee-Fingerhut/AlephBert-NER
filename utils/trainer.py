@@ -11,16 +11,21 @@ from tqdm import trange
 import pandas as pd
 
 
-def valid_loss_decreases(valid_los_fresh=None, valid_los_old=None, valid_los_oldest=None):
+def valid_loss_decreases(valid_los_fresh, valid_los_old, valid_los_oldest):
     #  if 2 epochs before the last epoch not decreasing exit sends False to make the machine exit
-    if valid_los_fresh is not None and type(valid_los_fresh) is float and valid_los_old is None and valid_los_oldest is None:
-        return True
-    elif valid_los_fresh < valid_los_old:
-        return True
-    elif valid_los_fresh < valid_los_oldest:
+    if (valid_los_fresh is not None) and (valid_los_old is None or valid_los_oldest is None):
         return True
     else:
-        return False
+        if (valid_los_old is not None) and (valid_los_fresh < valid_los_old):
+            return True
+        elif (valid_los_oldest is not None) and (valid_los_fresh < valid_los_oldest):
+            return True
+        elif (valid_los_oldest is not None and valid_los_old is not None) and (valid_los_old < valid_los_oldest):
+            return True
+        elif (valid_los_old is None) or (valid_los_oldest is None):
+            return True
+        else:
+            return False
 
 
 def train_model(

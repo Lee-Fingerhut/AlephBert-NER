@@ -7,7 +7,7 @@ sns.set(style="darkgrid")
 sns.set(font_scale=1.5)
 plt.rcParams["figure.figsize"] = (12, 6)
 
-from keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
@@ -64,10 +64,10 @@ if __name__ == "__main__":
     tr_inputs, val_inputs, tr_tags, val_tags = train_test_split(input_ids, tags, random_state=opts.seed, test_size=0.1)
     tr_masks, val_masks, _, _ = train_test_split(attention_masks, input_ids, random_state=opts.seed, test_size=0.1)
 
-    tr_inputs = torch.tensor(tr_inputs)
-    val_inputs = torch.tensor(val_inputs)
-    tr_tags = torch.tensor(tr_tags)
-    val_tags = torch.tensor(val_tags)
+    tr_inputs = torch.tensor(tr_inputs).type(torch.LongTensor)
+    val_inputs = torch.tensor(val_inputs).type(torch.LongTensor)
+    tr_tags = torch.tensor(tr_tags).type(torch.LongTensor)
+    val_tags = torch.tensor(val_tags).type(torch.LongTensor)
     tr_masks = torch.tensor(tr_masks)
     val_masks = torch.tensor(val_masks)
 

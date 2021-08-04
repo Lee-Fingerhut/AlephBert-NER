@@ -169,8 +169,8 @@ def train_model(
         data.to_csv('parameters.csv')
         data.to_pickle('pickle_parameters.pkl')
         print("Validation Accuracy: {:.3f}".format(epoch_accuracy))
-        if not valid_loss_decreases(eval_loss, validation_loss_old, validation_loss_oldest):
-            exit('Valid loss increases, stopping the process')
+        # if not valid_loss_decreases(eval_loss, validation_loss_old, validation_loss_oldest):
+        #     exit('Valid loss increases, stopping the process')
         if validation_max_accuracy < epoch_accuracy:
             validation_max_accuracy = epoch_accuracy
             torch.save(model, checkpoints.joinpath("model.pth"))

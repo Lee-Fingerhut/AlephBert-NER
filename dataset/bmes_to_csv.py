@@ -24,11 +24,12 @@ def bmes_to_cvs(source: Path):
             sentences[i] = z
 
     flat_list = [item for sublist in sentences for item in sublist]
-    return flat_list
+    return flat_list, i
 
 
 if __name__ == "__main__":
     all_files_dataset = []
+    number_of_sentences = 0
     for dataset in DATASETS_PATHS:
         source_dataset = dataset.expanduser()
 
@@ -36,9 +37,13 @@ if __name__ == "__main__":
             if file.is_dir():
                 continue
 
-            all_files_dataset.extend(bmes_to_cvs(file))
+            rows, n_sentences = bmes_to_cvs(file)
+            all_files_dataset.extend(rows)
+            number_of_sentences += n_sentences
 
     with open("dataset.csv", "w") as out_file:
         writer = csv.writer(out_file)
         writer.writerow(("Sentence #", "Word", "POS", "Tag"))
         writer.writerows(all_files_dataset)
+
+    # print(f"total number of sentences = {number_of_sentences}")

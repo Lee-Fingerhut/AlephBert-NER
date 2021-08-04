@@ -46,4 +46,4 @@ if __name__ == "__main__":
         writer.writerow(("Sentence #", "Word", "POS", "Tag"))
         writer.writerows(all_files_dataset)
 
-    # print(f"total number of sentences = {number_of_sentences}")
+    print(f"total number of sentences = {number_of_sentences}")

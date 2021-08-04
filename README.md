@@ -1,7 +1,9 @@
 # Named Entity Recognition for Hebrew using BERT
 
-Contact: 
-[Lee Fingerhut](mailto:leefingerhut@gmail.com)
+Contact: \
+[Lee Fingerhut](mailto:leefingerhut@gmail.com) \
+[Peleg Zborovsky](mailto:peleg122@gmail.com) \
+[Tal ben gozi](mailto:talbg9@gmail.com)
 
 ## Installations Guide
 1. Install an environment manager. Recommeneded: [Miniconda3](https://docs.conda.io/en/latest/miniconda.html).

@@ -11,7 +11,13 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
-from transformers import AdamW, BertForTokenClassification, BertTokenizerFast, get_linear_schedule_with_warmup
+from transformers import (
+    AdamW,
+    BertForTokenClassification,
+    BertTokenizerFast,
+    get_linear_schedule_with_warmup,
+    get_polynomial_decay_schedule_with_warmup,
+)
 from utils.parser import Parser
 from utils.tokenize import SentenceGetter, tokenize_and_preserve_labels
 from utils.trainer import train_model
@@ -102,8 +108,16 @@ if __name__ == "__main__":
 
     # Create a learning rate scheduler
     total_steps = len(train_dataloader) * opts.num_epochs
-    scheduler = get_linear_schedule_with_warmup(
-        optimizer, num_warmup_steps=opts.num_warmup_steps, num_training_steps=total_steps
+    # scheduler = get_linear_schedule_with_warmup(
+    #     optimizer, num_warmup_steps=opts.num_warmup_steps, num_training_steps=total_steps
+    # )
+    if not 0 <= opts.end_lr_factor < 1:
+        raise ValueError("`--end-lr-factor` must be in [0, 1)")
+    scheduler = get_polynomial_decay_schedule_with_warmup(
+        optimizer,
+        num_warmup_steps=opts.num_warmup_steps,
+        num_training_steps=total_steps,
+        lr_end=opts.end_lr_factor * opts.learning_rate,
     )
 
     checkpoints = Path("checkpoints").joinpath(opts.name)

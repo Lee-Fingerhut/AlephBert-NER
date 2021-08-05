@@ -36,7 +36,7 @@ def train_model(
     valid_dataloader: tud.DataLoader,
     tag_values,
     opts: argparse.Namespace,
-    checkpoints: Path
+    checkpoints: Path,
 ):
 
     train_loss, validation_loss, validation_accuracy = [], [], []
@@ -44,20 +44,23 @@ def train_model(
     i = 0
     validation_loss_old = None
     validation_loss_oldest = None
-    data = pd.DataFrame(columns=['Epoch no',
-                                 'Accuracy',
-                                 'Precision-Weighted',
-                                 'Recall-Weighted',
-                                 'F1-Score-Weighted',
-                                 'Precision-Macro',
-                                 'Recall-Macro',
-                                 'F1-Score-Macro',
-                                 'Precision-Micro',
-                                 'Recall-Micro',
-                                 'F1-Score-Micro',
-                                 'Valid Loss',
-                                 'Train Loss'
-                                 ])
+    data = pd.DataFrame(
+        columns=[
+            "Epoch no",
+            "Accuracy",
+            "Precision-Weighted",
+            "Recall-Weighted",
+            "F1-Score-Weighted",
+            "Precision-Macro",
+            "Recall-Macro",
+            "F1-Score-Macro",
+            "Precision-Micro",
+            "Recall-Micro",
+            "F1-Score-Micro",
+            "Valid Loss",
+            "Train Loss",
+        ]
+    )
     for _ in trange(opts.num_epochs, desc="Epoch"):
         # ========================================
         #               Training
@@ -142,32 +145,33 @@ def train_model(
             if tag_values[l_i] != "PAD"
         ]
         valid_tags = [tag_values[l_i] for l in true_labels for l_i in l if tag_values[l_i] != "PAD"]
-        epoch_accuracy = 100. * accuracy_score(pred_tags, valid_tags)
+        epoch_accuracy = 100.0 * accuracy_score(pred_tags, valid_tags)
         validation_accuracy.append(epoch_accuracy)
         # ========================================
         #               Statistics
         # ========================================
         validation_loss_oldest = validation_loss_old
         validation_loss_old = eval_loss
-        precision_macro = precision_recall_fscore_support(pred_tags, valid_tags, average='macro')
-        precision_micro = precision_recall_fscore_support(pred_tags, valid_tags, average='micro')
-        precision_weighted = precision_recall_fscore_support(pred_tags, valid_tags, average='weighted')
-        data.loc[i] = [i,
-                       '{:.3f}'.format(100. * accuracy_score(pred_tags, valid_tags)),
-                       '{:.3f}'.format(100. * precision_weighted[0]),
-                       '{:.3f}'.format(100. * precision_weighted[1]),
-                       '{:.3f}'.format(100. * precision_weighted[2]),
-                       '{:.3f}'.format(100. * precision_macro[0]),
-                       '{:.3f}'.format(100. * precision_macro[1]),
-                       '{:.3f}'.format(100. * precision_macro[2]),
-                       '{:.3f}'.format(100. * precision_micro[0]),
-                       '{:.3f}'.format(100. * precision_micro[1]),
-                       '{:.3f}'.format(100. * precision_micro[2]),
-                       '{:.3f}'.format(100. * eval_loss),
-                       '{:.3f}'.format(100. * avg_train_loss)
-                       ]
-        data.to_csv('parameters.csv')
-        data.to_pickle('pickle_parameters.pkl')
+        precision_macro = precision_recall_fscore_support(pred_tags, valid_tags, average="macro")
+        precision_micro = precision_recall_fscore_support(pred_tags, valid_tags, average="micro")
+        precision_weighted = precision_recall_fscore_support(pred_tags, valid_tags, average="weighted")
+        data.loc[i] = [
+            i,
+            "{:.3f}".format(100.0 * accuracy_score(pred_tags, valid_tags)),
+            "{:.3f}".format(100.0 * precision_weighted[0]),
+            "{:.3f}".format(100.0 * precision_weighted[1]),
+            "{:.3f}".format(100.0 * precision_weighted[2]),
+            "{:.3f}".format(100.0 * precision_macro[0]),
+            "{:.3f}".format(100.0 * precision_macro[1]),
+            "{:.3f}".format(100.0 * precision_macro[2]),
+            "{:.3f}".format(100.0 * precision_micro[0]),
+            "{:.3f}".format(100.0 * precision_micro[1]),
+            "{:.3f}".format(100.0 * precision_micro[2]),
+            "{:.3f}".format(100.0 * eval_loss),
+            "{:.3f}".format(100.0 * avg_train_loss),
+        ]
+        data.to_csv("parameters.csv")
+        data.to_pickle("pickle_parameters.pkl")
         print("Validation Accuracy: {:.3f}".format(epoch_accuracy))
         # if not valid_loss_decreases(eval_loss, validation_loss_old, validation_loss_oldest):
         #     exit('Valid loss increases, stopping the process')
@@ -175,8 +179,4 @@ def train_model(
             validation_max_accuracy = epoch_accuracy
             torch.save(model, checkpoints.joinpath("model.pth"))
 
-    return {
-        "train loss": train_loss,
-        "validation loss": validation_loss,
-        "validation accuracy": validation_accuracy
-    }
+    return {"train loss": train_loss, "validation loss": validation_loss, "validation accuracy": validation_accuracy}

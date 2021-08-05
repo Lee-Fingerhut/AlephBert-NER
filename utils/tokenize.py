@@ -1,4 +1,3 @@
-
 class SentenceGetter(object):
     def __init__(self, data):
         self.n_sent = 1

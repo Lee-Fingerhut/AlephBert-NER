@@ -19,12 +19,13 @@ class Parser(object):
 
         general = parser.add_argument_group("general")
         general.add_argument("--seed", type=int, default=None, help="seed for reproducibility")
-        general.add_argument("--name", type=str, default=param.todays_date_time,
-                             help="name of directory for product")
+        general.add_argument("--name", type=str, default=param.todays_date_time, help="name of directory for product")
 
         dataset = parser.add_argument_group("dataset")
         dataset.add_argument("--train-file", type=Path, required=True, help="path to train file")
-        dataset.add_argument("--max-seq-len", type=int, default=param.max_sequence_length, help="maximal sequence length")
+        dataset.add_argument(
+            "--max-seq-len", type=int, default=param.max_sequence_length, help="maximal sequence length"
+        )
 
         training = parser.add_argument_group("training")
         training.add_argument(
@@ -38,12 +39,29 @@ class Parser(object):
 
         optimizer = parser.add_argument_group("optimizer")
         optimizer.add_argument("--learning-rate", type=float, default=param.learning_rate, help="learning rate")
-        optimizer.add_argument("--optimizer-eps", type=float, default=param.optimizer_tolerance, help="optimizer tolerance")
-        optimizer.add_argument("--weight-decay-rate", type=float, default=param.optimizer_weight_decay_rate, help="optimizer weight decay rate")
-        optimizer.add_argument("--max-grad-norm", type=float, default=param.maximal_gradients_norm, help="maximal gradients norm")
+        optimizer.add_argument(
+            "--optimizer-eps", type=float, default=param.optimizer_tolerance, help="optimizer tolerance"
+        )
+        optimizer.add_argument(
+            "--weight-decay-rate",
+            type=float,
+            default=param.optimizer_weight_decay_rate,
+            help="optimizer weight decay rate",
+        )
+        optimizer.add_argument(
+            "--max-grad-norm", type=float, default=param.maximal_gradients_norm, help="maximal gradients norm"
+        )
 
         scheduler = parser.add_argument_group("scheduler")
-        scheduler.add_argument("--num-warmup-steps", type=int, default=param.scheduler_warmup_steps, help="scheduler warmup steps")
+        scheduler.add_argument(
+            "--num-warmup-steps", type=int, default=param.scheduler_warmup_steps, help="scheduler warmup steps"
+        )
+        scheduler.add_argument(
+            "--end-lr-factor",
+            type=int,
+            default=param.scheduler_end_lr_factor,
+            help="scheduler final lr = `--learning-rate` * `--end-lr-factor`",
+        )
 
         opts = parser.parse_args()
         set_seed(opts.seed)

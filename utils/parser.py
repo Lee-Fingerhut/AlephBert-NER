@@ -58,7 +58,7 @@ class Parser(object):
         )
         scheduler.add_argument(
             "--end-lr-factor",
-            type=int,
+            type=float,
             default=param.scheduler_end_lr_factor,
             help="scheduler final lr = `--learning-rate` * `--end-lr-factor`",
         )

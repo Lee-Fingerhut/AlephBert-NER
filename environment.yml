@@ -1,4 +1,4 @@
-name: ner
+name: ner-bert
 channels:
   - pytorch
   - defaults

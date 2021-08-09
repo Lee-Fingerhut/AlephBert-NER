@@ -39,5 +39,5 @@ if __name__ == "__main__":
             new_labels.append(tag_values[label_idx])
             new_tokens.append(token)
 
-    for token, label in zip(new_tokens, new_labels):
+    for token, label in zip(new_tokens[1:-1], new_labels[1:-1]):
         print("{}\t{}".format(label, token))

@@ -94,8 +94,6 @@ def train_model(
             torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=opts.max_grad_norm)
             # update parameters
             optimizer.step()
-            # Update the learning rate.
-            scheduler.step()
 
         # Calculate the average loss over the training data.
         avg_train_loss = total_loss / len(train_dataloader)
@@ -173,8 +171,9 @@ def train_model(
         data.to_csv("parameters.csv")
         data.to_pickle("pickle_parameters.pkl")
         print("Validation Accuracy: {:.3f}".format(epoch_accuracy))
-        # if not valid_loss_decreases(eval_loss, validation_loss_old, validation_loss_oldest):
-        #     exit('Valid loss increases, stopping the process')
+        if not valid_loss_decreases(eval_loss, validation_loss_old, validation_loss_oldest):
+            # Update the learning rate.
+            scheduler.step()
         if validation_max_accuracy < epoch_accuracy:
             validation_max_accuracy = epoch_accuracy
             torch.save(model, checkpoints.joinpath("model.pth"))

@@ -6,23 +6,11 @@ class App extends Component {
     state = {
         data: []
     };
-
-
+    //getting string from textJSON and sending to the look_and_see Function to process the input
     componentDidMount() {
-        const url = "https://en.wikipedia.org/w/api.php?action=opensearch&search=Seona+Dancing&format=json&origin=*&limit=1";
-
-        fetch(url)
-            .then(result => result.json())
-            .then(result => {
-                this.setState({
-                    data: result
-                })
-            });
-    }
-
-
-    componentDidMount() {
-        axios.get('http://127.0.0.1:3000/E:/NER_Project-main/APP/Client/src/textJSON.json')
+        //storing current path into the variable and use it later to access textJSON.json file
+        const path = ${__dirname}
+        axios.get('http://127.0.0.1:3000/{path}/textJSON.json')
             .then(res => {
                 this.setState({ data: res.data });
             });
@@ -31,14 +19,14 @@ class App extends Component {
 
     render() {
         const { data } = this.state;
-
+        //mapping each word to index
         const result = data.map((entry, index) => {
             console.log(entry);
             
                     return  <li key={index}>{entry}</li>
                     
         });
-
+        //returns list of words
        return <ul>{result}</ul>;
     }
 }

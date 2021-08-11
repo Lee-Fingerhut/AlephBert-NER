@@ -2,7 +2,7 @@
 
 Contact: \
 [Lee Fingerhut](mailto:leefingerhut@gmail.com) \
-[Peleg Zborovsky](mailto:peleg122@gmail.com) \
+[Peleg Zborovsky](mailto:peleg122@gmail.com) 
 
 ## Installations Guide
 1. Install an environment manager. Recommeneded: [Miniconda3](https://docs.conda.io/en/latest/miniconda.html).

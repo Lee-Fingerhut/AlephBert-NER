@@ -12,7 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import { yellow } from '@material-ui/core/colors';
 import Tippy from '@tippy.js/react';
 
-
+// css of the document:
 document.body.style.background = "#bfd6f6";
 const BTN = styled.button`
   background-color: gray;
@@ -82,7 +82,7 @@ const StyledTableCell = withStyles((theme) => ({
     },
 }))(TableCell);
 
-
+//hover effect
 const StyledTableRow = withStyles((theme) => ({
     root: {
         '&:nth-of-type(odd)': {
@@ -96,7 +96,7 @@ const useStyles = makeStyles({
         minWidth: 700,
     },
 });
-
+// breaking entities with ^ in between them taking only the last entity trait and trimming two first chars
 function entityBreaking(val){
 	const entities = val.split('^');
 	const length = entities.length;
@@ -116,7 +116,7 @@ function entityBreaking(val){
 		}
 	}
 }
-
+// adding the full name to the entity for the legend
 function fullEntity(val){
 	if(val != 'O'){
 		switch (val) {
@@ -154,7 +154,7 @@ function fullEntity(val){
 }
 
 
-
+// data = words, ch
 class App extends Component {
     state = {
         characters: [],
@@ -169,7 +169,7 @@ class App extends Component {
         Num_of_entities: [],
         table :[]
     };
-
+    // removing index from the characters
     removeCharacter = index => {
         const { characters } = this.state;
 
@@ -179,7 +179,7 @@ class App extends Component {
             })
         });
     }
-
+    // assign the characters to the current state
     handleSubmit = character => {
         this.setState({ characters: [...this.state.characters, character] });
     }
@@ -196,6 +196,7 @@ class App extends Component {
         for (let i = 0; i < data.length; i++) {
             sentesce += data[i]
         }
+        // getting a list of words from sentesce and assigning colors to different entities
         words = sentesce.split(" ");
         for (let i = 0; i < m.length; i++) {
             var Type = entityBreaking(m[i].entity)
@@ -205,10 +206,11 @@ class App extends Component {
 
         
 
-
+        //setting colors to the list of colors and words to the words list data2
         this.setState({ colors: [...colors2] })
         this.setState({ data2: [...words] })
         let indents = [];
+        //counting entities
         for (var i = 0; i < this.state.data2.length; i++) {
             if (m[i] != null && entityBreaking(m[i].entity) != 'O') {
               //  console.log(this.state.colors[i]);
@@ -216,9 +218,11 @@ class App extends Component {
             }
         }
         this.setState({Num_of_entities: num_entities});
+        // adding num of entities and printing it into the web page
         indents.push(<li><h>
             <mark style={{background: yellow, padding: '0.45em 0.6em', lineHeight: '1', borderRadius: '0.35em' }}>Entities<span style={{ lineHeight: '1', borderRadius: '0.35em', verticalAlign: 'middle', marginLeft: '0.5rem', fontSize: '0.8em', fontWeight: 'bold' }}>Num : {num_entities}</span></mark>
          </h></li>);
+         //adding scores to the table
         print_scores.push(
             <h1>
                 Probabilities:
@@ -238,12 +242,12 @@ class App extends Component {
             }
             else indents.push(this.state.data2[i] + " ");
         }
-
+        // adding entities to Legend and printing the label and marking the label with yellow
         indents.push(<li><h>
             <mark style={{background: yellow, padding: '0.45em 0.6em', lineHeight: '1', borderRadius: '0.35em' }}>LEGEND<span style={{ lineHeight: '1', borderRadius: '0.35em', verticalAlign: 'middle', marginLeft: '0.5rem', fontSize: '0.8em', fontWeight: 'bold' }}></span></mark>
          </h></li>);
         let list_dup = []
-
+        // removing duplicates from the legend
         for (var i = 0; i < m.length; i++) {
             if (m[i] != null && entityBreaking(m[i].entity) != 'O') {
                 if (!list_dup.includes(fullEntity(entityBreaking(m[i].entity)))){
@@ -260,7 +264,7 @@ class App extends Component {
         this.setState({ printScores: [...print_scores] });
         this.create_table();
     }
-
+    // creating the table with the rows and columns
     create_table(){
         var table2 = []
         table2.push(<TableContainer component={Paper}  align= "justify" padding ="2em">
@@ -324,6 +328,7 @@ class App extends Component {
                 return 'white';
         }
     }
+    //sending to the server the input string in json format
     sendHttp = () => {
         const requestOptions = {
             method: 'POST',
@@ -335,6 +340,7 @@ class App extends Component {
         fetch('http://127.0.0.1:105/new_code', requestOptions)
             .then(response => response.text())
     }
+    //getting input from the files and sending it to the dorgetter function
     getData = () => {
         var text = require('./RawText.json'); //(with path)
         var jsontext = require('./textJSON.json'); //(with path)
@@ -346,7 +352,7 @@ class App extends Component {
     handleChange = (c) => {
         this.setState({ valueInput: c.target.value })
     }
-
+    // render each time the table and the info to display for every change
     render() {
         const { print } = this.state;
         const {table} = this.state;

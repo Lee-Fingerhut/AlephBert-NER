@@ -7,7 +7,7 @@ app = Flask("asd")
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-
+# pushing info into client with post and json input with the name key
 @app.route('/new_code', methods=['POST'])
 def check():
     data = json.loads(request.data.decode("utf-8"))

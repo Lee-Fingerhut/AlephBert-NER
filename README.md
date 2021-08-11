@@ -3,7 +3,6 @@
 Contact: \
 [Lee Fingerhut](mailto:leefingerhut@gmail.com) \
 [Peleg Zborovsky](mailto:peleg122@gmail.com) \
-[Tal Ben Gozi](mailto:talbg9@gmail.com)
 
 ## Installations Guide
 1. Install an environment manager. Recommeneded: [Miniconda3](https://docs.conda.io/en/latest/miniconda.html).
@@ -16,7 +15,7 @@ Contact: \
 4. Create a new environment from environment.yml (you can change the environment name in the file)
    ```sh
    conda env update -f environment.yml
-   conda activate ner
+   conda activate ner-bert
    ```
 
 ## Training
